@@ -4,6 +4,8 @@ int px = 500;
 int upperPipeHeight = (int) random(100,300);
 int birdVelocity = 5;
 int gravity = 1;
+int score = 0;
+boolean isPassed = false;
 void setup(){
   size(500,400);
 }
@@ -31,19 +33,32 @@ void draw(){
     print("Game Over ");
     exit();
   }
+  fill(0,0,0);
+  text("Score: " + score, 430, 15);
 }
 public void teleportPipes(){
    if(px==0){
    px=width;
    upperPipeHeight = (int) random(100,300);
+   isPassed = false;
   }
 }
 boolean intersectsPipes() { 
      if (y < upperPipeHeight && x > px && x < (px+20)){
           return true; }
      else if (y>upperPipeHeight+50 && x > px && x < (px+20)) {
-          return true; }
-     else { return false; }
+          return true;
+        }
+     else if((x > px+20 && x < px+30) && (y >= upperPipeHeight) && y <= upperPipeHeight+50){
+        if(isPassed == false){
+          isPassed = true;
+          score++;
+        }
+        return false;
+        }
+     else {
+       return false; 
+   }
 }
 boolean hitsGround() {
   if(y==height){
