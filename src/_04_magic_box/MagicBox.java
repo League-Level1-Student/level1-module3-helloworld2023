@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -18,14 +19,19 @@ import java.net.MalformedURLException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-public class MagicBox extends JPanel implements Runnable, MouseListener, ActionListener {
+public class MagicBox extends JPanel implements Runnable, MouseListener, MouseMotionListener {
 MediaPalace mp;
 int x = 300;
 int y = 500;
-boolean b;
+int x1 = 400;
+int y1 = 900;
+int x2 = 150;
+int y2 = 700;
+JFrame frame = new JFrame("The Magic Box contains many secrets...");
 	/*
 	 * We are going to hide secrets within the magic box. 
 	 * When the user clicks on a secret place, stuff will happen.
@@ -54,7 +60,6 @@ boolean b;
 	}
 
 	private void createUI() {
-		JFrame frame = new JFrame("The Magic Box contains many secrets...");
 		frame.add(this);
 		setPreferredSize(new Dimension(backgroundImage.getWidth(), backgroundImage.getHeight()));
 		frame.pack();
@@ -62,6 +67,7 @@ boolean b;
 		frame.setVisible(true);
 		frame.addMouseListener(this);
 		mp = new MediaPalace();
+		frame.addMouseMotionListener(this);
 	}
 
 	private void loadBackgroundImage() throws Exception {
@@ -86,11 +92,6 @@ boolean b;
 	@Override
 	public void mousePressed(MouseEvent e) {
 		// TODO Auto-generated method stub
-		if(e.getX() == x && e.getY() == y) {
-			System.out.println("Secret 1");
-			mp.speak("Magic Box");
-		}
-		b = true;
 	}
 
 	@Override
@@ -112,12 +113,31 @@ boolean b;
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void mouseDragged(MouseEvent e) {
 		// TODO Auto-generated method stub
-		if(b==true) {
+		
+	}
+
+	@Override
+	public void mouseMoved(MouseEvent e) {
+		// TODO Auto-generated method stub
+		if(e.getX() > x && e.getY() > y && e.getX() < x+20 && e.getY() < y+20) {
 			System.out.println("Secret 1");
-			mp.speak("Magic Box");
+			mp.speak("Secret 1");
 		}
+		if(e.getX() > x1 && e.getY() > y1 && e.getX() < x1+20 && e.getY() < y1+20) {
+			System.out.println("Secret 2");
+			mp.speak("Secret 2");
+			mp.playMusicOnComputer("src/_04_magic_box/Garden.mp3");
+			}
+		if(e.getX() > x2 && e.getY() > y2 && e.getX() < x2+20 && e.getY() < y2+20) {
+			System.out.println("Secret 3");
+			mp.speak("Secret 3");
+			JLabel jl = mp.loadImageFromWithinProject("Totem.jpg");
+			frame.add(jl);
+			frame.pack();
+		}
+		System.out.println(e.getX() + " , " + e.getY());
 	}
 
 }
